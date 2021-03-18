@@ -64,7 +64,7 @@ def save_checkpoint(cfg: CheckpointConfig, trainer, epoch_itr, val_loss):
     checkpoint_conds["checkpoint{}{}.pt".format(epoch, suffix)] = (
         end_of_epoch and not cfg.no_epoch_checkpoints and epoch % cfg.save_interval == 0
     )
-    checkpoint_conds["checkpoint_{}_{}{}.pt".format(epoch, updates, suffix)] = (
+    checkpoint_conds["checkpoint-{}-{}{}.pt".format(epoch, updates, suffix)] = (
         not end_of_epoch
         and cfg.save_interval_updates > 0
         and updates % cfg.save_interval_updates == 0
@@ -75,7 +75,7 @@ def save_checkpoint(cfg: CheckpointConfig, trainer, epoch_itr, val_loss):
     )
     if val_loss is not None and cfg.keep_best_checkpoints > 0:
         checkpoint_conds[
-            "checkpoint.best_{}_{:.2f}.pt".format(cfg.best_checkpoint_metric, val_loss)
+            "checkpoint.best-{}-{:.2f}.pt".format(cfg.best_checkpoint_metric, val_loss)
         ] = not hasattr(save_checkpoint, "best") or is_better(
             val_loss, save_checkpoint.best
         )
@@ -115,7 +115,7 @@ def save_checkpoint(cfg: CheckpointConfig, trainer, epoch_itr, val_loss):
     if not end_of_epoch and cfg.keep_interval_updates > 0:
         # remove old checkpoints; checkpoints are sorted in descending order
         checkpoints = checkpoint_paths(
-            cfg.save_dir, pattern=r"checkpoint_\d+_(\d+)\.pt"
+            cfg.save_dir, pattern=r"checkpoint-\d+-(\d+)\.pt"
         )
         for old_chk in checkpoints[cfg.keep_interval_updates :]:
             if os.path.lexists(old_chk):
@@ -132,7 +132,7 @@ def save_checkpoint(cfg: CheckpointConfig, trainer, epoch_itr, val_loss):
         # only keep the best N checkpoints according to validation metric
         checkpoints = checkpoint_paths(
             cfg.save_dir,
-            pattern=r"checkpoint\.best_{}_(\d+\.?\d*)\.pt".format(
+            pattern=r"checkpoint\.best-{}-(\d+\.?\d*)\.pt".format(
                 cfg.best_checkpoint_metric
             ),
         )
