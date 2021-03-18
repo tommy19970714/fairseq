@@ -167,10 +167,10 @@ def load_checkpoint(cfg: CheckpointConfig, trainer, **passthrough_args):
 
     suffix = trainer.checkpoint_suffix
     if (
-        cfg.restore_file == "checkpoint_last.pt"
+        cfg.restore_file == "checkpoint-last.pt"
     ):  # default value of restore_file is 'checkpoint_last.pt'
         checkpoint_path = os.path.join(
-            cfg.save_dir, "checkpoint_last{}.pt".format(suffix)
+            cfg.save_dir, "checkpoint-last{}.pt".format(suffix)
         )
         first_launch = not PathManager.exists(checkpoint_path)
         if cfg.finetune_from_model is not None and first_launch:
@@ -195,7 +195,7 @@ def load_checkpoint(cfg: CheckpointConfig, trainer, **passthrough_args):
     else:
         checkpoint_path = cfg.restore_file
 
-    if cfg.restore_file != "checkpoint_last.pt" and cfg.finetune_from_model:
+    if cfg.restore_file != "checkpoint-last.pt" and cfg.finetune_from_model:
         raise ValueError(
             "--finetune-from-model and --restore-file (non-default value) "
             "can not be specified together: " + str(cfg)
