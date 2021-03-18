@@ -69,7 +69,7 @@ def save_checkpoint(cfg: CheckpointConfig, trainer, epoch_itr, val_loss):
         and cfg.save_interval_updates > 0
         and updates % cfg.save_interval_updates == 0
     )
-    checkpoint_conds["checkpoint_best{}.pt".format(suffix)] = val_loss is not None and (
+    checkpoint_conds["checkpoint-best{}.pt".format(suffix)] = val_loss is not None and (
         not hasattr(save_checkpoint, "best")
         or is_better(val_loss, save_checkpoint.best)
     )
@@ -80,7 +80,7 @@ def save_checkpoint(cfg: CheckpointConfig, trainer, epoch_itr, val_loss):
             val_loss, save_checkpoint.best
         )
     checkpoint_conds[
-        "checkpoint_last{}.pt".format(suffix)
+        "checkpoint-last{}.pt".format(suffix)
     ] = not cfg.no_last_checkpoints
 
     extra_state = {"train_iterator": epoch_itr.state_dict(), "val_loss": val_loss}
