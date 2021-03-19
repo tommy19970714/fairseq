@@ -22,6 +22,7 @@ from fairseq.dataclass.utils import (
 from fairseq.file_io import PathManager
 from fairseq.models import FairseqDecoder, FairseqEncoder
 from omegaconf import Container, DictConfig, open_dict, OmegaConf
+import time
 
 
 logger = logging.getLogger(__name__)
@@ -92,8 +93,10 @@ def save_checkpoint(cfg: CheckpointConfig, trainer, epoch_itr, val_loss):
     ]
     if len(checkpoints) > 0:
         trainer.save_checkpoint(checkpoints[0], extra_state)
+        time.sleep(30)
         for cp in checkpoints[1:]:
             if cfg.write_checkpoints_asynchronously:
+                time.sleep(30)
                 # TODO[ioPath]: Need to implement a delayed asynchronous
                 # file copying/moving feature.
                 logger.warning(
